@@ -244,6 +244,7 @@
 		BA1B8F2B26205C33004060C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XQ7QXXXWLH;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -255,6 +256,7 @@
 		BA1B8F2C26205C33004060C2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XQ7QXXXWLH;
 				ENABLE_HARDENED_RUNTIME = YES;

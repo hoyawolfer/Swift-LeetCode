@@ -15,8 +15,8 @@ class ListNode {
 }
 let node1 = ListNode.init(1)
 let node2 = ListNode.init(2)
-let node3 = ListNode.init(2)
-let node4 = ListNode.init(3)
+let node3 = ListNode.init(3)
+let node4 = ListNode.init(4)
 let node5 = ListNode.init(5)
 //
 //let node11 = ListNode.init(1)
@@ -45,6 +45,364 @@ func printList (_ head: ListNode?) {
         head_node = head_node?.next
     }
 }
+class TreeNode {
+    var val: Int
+    var left: TreeNode?
+    var right: TreeNode?
+    init() { self.val = 0; self.left = nil; self.right = nil; }
+    init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
+    init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
+        self.val = val
+        self.left = left
+        self.right = right
+    }
+}
+
+let tree_node_1 = TreeNode.init(1)
+let tree_node_2 = TreeNode.init(2)
+let tree_node_3 = TreeNode.init(3)
+let tree_node_4 = TreeNode.init(4)
+let tree_node_5 = TreeNode.init(5)
+let tree_node_6 = TreeNode.init(6)
+tree_node_1.left = tree_node_2
+tree_node_1.right = tree_node_3
+tree_node_3.left = tree_node_4
+tree_node_3.right = tree_node_5
+
+//95. 不同的二叉搜索树 II
+//给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
+//示例：
+//输入：3
+//输出：
+//[
+//  [1,null,3,2],
+//  [3,2,null,1],
+//  [3,1,null,null,2],
+//  [2,1,3],
+//  [1,null,2,null,3]
+//]
+//解释：
+//以上的输出对应以下 5 种不同结构的二叉搜索树：
+//
+//   1         3     3      2      1
+//    \       /     /      / \      \
+//     3     2     1      1   3      2
+//    /     /       \                 \
+//   2     1         2                 3
+//
+//提示：
+//0 <= n <= 8
+
+func generateTrees(_ n: Int) -> [TreeNode?] {
+    
+}
+//94. 二叉树的中序遍历
+//递归法
+//func inorderTraversal(_ root: TreeNode?) -> [Int] {
+//    var res = [Int]()
+//    inorder(root, &res)
+//    return res
+//}
+//
+//func inorder(_ root: TreeNode?, _ res: inout [Int]) {
+//    print(root?.val ?? 0)
+//    if root == nil {
+//        return
+//    }
+//    inorder(root?.left, &res)
+//    inorder(root?.right, &res)
+//    res.append(root!.val)
+//}
+//迭代法
+//func inorderTraversal(_ root: TreeNode?) -> [Int] {
+//    var r = root
+//    var stack = [TreeNode]()
+//    var res = [Int]()
+//    while r != nil || stack.count != 0 {
+//        while r != nil {
+//            stack.append(r!)
+//            r = r?.left
+//        }
+//        let p = stack.popLast()
+//        res.append(p!.val)
+//        r = p?.right
+//    }
+//    return res
+//}
+//
+//print(inorderTraversal(tree_node_1))
+//92. 反转链表 II
+//给你单链表的头指针 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+//示例 1：
+//输入：head = [1,2,3,4,5], left = 2, right = 4
+//输出：[1,4,3,2,5]
+//示例 2：
+//输入：head = [5], left = 1, right = 1
+//输出：[5]
+//提示：
+//链表中节点数目为 n
+//1 <= n <= 500
+//-500 <= Node.val <= 500
+//1 <= left <= right <= n
+//func reverseBetween(_ head: ListNode?, _ left: Int, _ right: Int) -> ListNode? {
+//    if left == right {
+//        return head
+//    }
+//    let dummy = ListNode.init()
+//    dummy.next = head
+//
+//    var left_head = dummy
+//    var left_p = head
+//
+//    var right_head = head
+//    var right_count = 0
+//
+//    while right_count < right - 1 {
+//        right_count += 1
+//        if right_count == left - 1 {
+//            left_head = right_head!
+//
+//            left_p = right_head!.next
+//        }
+//
+//        if right_count == right - 1 {
+//            right_head = right_head!.next
+//            let p = right_head?.next
+//            right_head!.next = nil
+//            right_head = p
+//            break
+//        } else {
+//            right_head = right_head?.next
+//        }
+//    }
+//    left_head.next = nil
+//    while left_p != nil {
+//        let p = left_p
+//        left_p = left_p?.next
+//        p?.next = right_head
+//        right_head = p!
+//    }
+//    left_head.next = right_head
+//    return dummy.next
+//}
+//
+//printList(reverseBetween(node1, 2, 4))
+//90. 子集 II
+//给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+//解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+//示例 1：
+//输入：nums = [1,2,2]
+//输出：[[],[1],[1,2],[1,2,2],[2],[2,2]]
+//示例 2：
+//输入：nums = [0]
+//输出：[[],[0]]
+//提示：
+//1 <= nums.length <= 10
+//-10 <= nums[i] <= 10
+//func subsetsWithDup(_ nums: [Int]) -> [[Int]] {
+//    let sorted_nums = nums.sorted()
+//    var path = [Int]()
+//    var result = [[Int]]()
+//    dfs(0, sorted_nums, &path, &result)
+//    return result
+//}
+//
+//func dfs(_ index: Int, _ nums: [Int], _ path: inout [Int], _ result: inout [[Int]]) {
+//    result.append(path)
+//    for i in index..<nums.count {
+//        if i > index && nums[i] == nums[i - 1] {
+//            continue
+//        }
+//        path.append(nums[i])
+//        dfs(i + 1, nums, &path, &result)
+//        path.removeLast()
+//    }
+//}
+//print(subsetsWithDup([1,2,2]))
+//89. 格雷编码
+//格雷编码是一个二进制数字系统，在该系统中，两个连续的数值仅有一个位数的差异。
+//给定一个代表编码总位数的非负整数 n，打印其格雷编码序列。即使有多个不同答案，你也只需要返回其中一种。
+//格雷编码序列必须以 0 开头。
+//示例 1:
+//输入: 2
+//输出: [0,1,3,2]
+//解释:
+//00 - 0
+//01 - 1
+//11 - 3
+//10 - 2
+//对于给定的 n，其格雷编码序列并不唯一。
+//例如，[0,2,3,1] 也是一个有效的格雷编码序列。
+//00 - 0
+//10 - 2
+//11 - 3
+//01 - 1
+//示例 2:
+//输入: 0
+//输出: [0]
+//解释: 我们定义格雷编码序列必须以 0 开头。
+//     给定编码总位数为 n 的格雷编码序列，其长度为 2n。当 n = 0 时，长度为 20 = 1。
+//     因此，当 n = 0 时，其格雷编码序列为 [0]。
+
+//func grayCode(_ n: Int) -> [Int] {
+//
+//}
+//88. 合并两个有序数组
+//给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+//初始化 nums1 和 nums2 的元素数量分别为 m 和 n 。你可以假设 nums1 的空间大小等于 m + n，这样它就有足够的空间保存来自 nums2 的元素。
+//示例 1：
+//输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+//输出：[1,2,2,3,5,6]
+//示例 2：
+//输入：nums1 = [1], m = 1, nums2 = [], n = 0
+//输出：[1]
+//提示：
+//nums1.length == m + n
+//nums2.length == n
+//0 <= m, n <= 200
+//1 <= m + n <= 200
+//-109 <= nums1[i], nums2[i] <= 109
+//1 2 3 1 5 6
+//func merge(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+//    if n == 0 {
+//        return
+//    }
+//    for i in m..<(m + n) {
+//        nums1[i] = nums2[i - m]
+//    }
+//    if m == 0 {
+//        return
+//    }
+//    for i in m..<m + n {
+//        for j in (1...i).reversed() {
+//            if nums1[j] < nums1[j - 1] {
+//                let tmp = nums1[j]
+//                nums1[j] = nums1[j - 1]
+//                nums1[j - 1] = tmp
+//            } else {
+//                break
+//            }
+//        }
+//    }
+//}
+//func merge(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+//    var p1 = m - 1
+//    var p2 = n - 1
+//    var tail = m + n - 1
+//    var cur = 0
+//    while p1 >= 0 || p2 >= 0 {
+//        if p1 == -1 {
+//            cur = nums2[p2]
+//            p2 -= 1
+//        } else if p2 == -1 {
+//            cur = nums1[p1]
+//            p1 -= 1
+//        } else if nums1[p1] > nums2[p2] {
+//            cur = nums1[p1]
+//            p1 -= 1
+//        } else {
+//            cur = nums2[p2]
+//            p2 -= 1
+//        }
+//        nums1[tail] = cur
+//        tail -= 1
+//    }
+//}
+//var nums1 = [2,0]
+//var nums2 = [1]
+//merge(&nums1, 1, nums2, 1)
+//print(nums1)
+//86. 分隔链表
+//给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+//你应当 保留 两个分区中每个节点的初始相对位置。
+//示例 1：
+//输入：head = [1,4,3,2,5,2], x = 3
+//输出：[1,2,2,4,3,5]
+//示例 2：
+//输入：head = [2,1], x = 2
+//输出：[1,2]
+//提示：
+//链表中节点的数目在范围 [0, 200] 内
+//-100 <= Node.val <= 100
+//-200 <= x <= 200
+//func partition(_ head: ListNode?, _ x: Int) -> ListNode? {
+//    let dummy = ListNode.init()
+//    var small = dummy
+//    let right = ListNode.init()
+//    var large = right
+//    var new_head = head
+//    while new_head != nil {
+//        if new_head!.val < x {
+//            small.next = new_head
+//            small = small.next!
+//        } else {
+//            large.next = new_head
+//            large = large.next!
+//        }
+//        new_head = new_head?.next
+//    }
+//    large.next = nil
+//    small.next = right.next
+//    return dummy.next
+//}
+//printList(partition(node1, 3))
+//84. 柱状图中最大的矩形
+//给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+//求在该柱状图中，能够勾勒出来的矩形的最大面积。
+//以上是柱状图的示例，其中每个柱子的宽度为 1，给定的高度为 [2,1,5,6,2,3]。
+//图中阴影部分为所能勾勒出的最大矩形面积，其面积为 10 个单位。
+//示例:
+//输入: [2,1,5,6,2,3]
+//输出: 10
+//func largestRectangleArea(_ heights: [Int]) -> Int {
+//    var stack = [Int]()
+//    var res = 0
+//    stack.append(0)
+//    for i in 0..<heights.count {
+//        while stack.count != 0 && heights[i] <  {
+//            <#code#>
+//        }
+//        if let last = stack.last {
+//            if last < heights[i] {
+//                stack.append(heights[i])
+//            } else {
+//
+//            }
+//        }
+//    }
+//}
+//83. 删除排序链表中的重复元素
+//存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次 。
+//返回同样按升序排列的结果链表。
+//示例 1：
+//输入：head = [1,1,2]
+//输出：[1,2]
+//示例 2：
+//输入：head = [1,1,2,3,3]
+//输出：[1,2,3]
+//提示：
+//链表中节点数目在范围 [0, 300] 内
+//-100 <= Node.val <= 100
+//题目数据保证链表已经按升序排列
+
+//func deleteDuplicates(_ head: ListNode?) -> ListNode? {
+//    let dummy = ListNode.init()
+//    var new_head = dummy
+//    var cur = head
+//    var next = head?.next
+//    while next != nil || cur != nil {
+//        while next != nil && next!.val == cur!.val {
+//            next = next?.next
+//        }
+//        new_head.next = cur
+//        cur?.next = nil
+//        new_head = new_head.next!
+//        cur = next
+//        next = next?.next
+//    }
+//    return dummy.next
+//}
+//printList(deleteDuplicates(node1))
 //82. 删除排序链表中的重复元素 II
 //存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
 //返回同样按升序排列的结果链表。
@@ -60,28 +418,28 @@ func printList (_ head: ListNode?) {
 //题目数据保证链表已经按升序排列
 //11335
 //12335
-func deleteDuplicates(_ head: ListNode?) -> ListNode? {
-    let dummy = ListNode.init()
-    var new_head = dummy
-    var cur = head
-    var next = head?.next
-    while cur != nil || next != nil {
-        if next != nil && cur!.val == next!.val{
-            while next != nil && cur!.val == next!.val {
-                next = next?.next
-            }
-        } else {
-            new_head.next = cur
-            cur?.next = nil
-            new_head = new_head.next!
-        }
-        cur = next
-        next = next?.next
-    }
-    return dummy.next
-}
-
-printList(deleteDuplicates(node1))
+//func deleteDuplicates(_ head: ListNode?) -> ListNode? {
+//    let dummy = ListNode.init()
+//    var new_head = dummy
+//    var cur = head
+//    var next = head?.next
+//    while cur != nil || next != nil {
+//        if next != nil && cur!.val == next!.val{
+//            while next != nil && cur!.val == next!.val {
+//                next = next?.next
+//            }
+//        } else {
+//            new_head.next = cur
+//            cur?.next = nil
+//            new_head = new_head.next!
+//        }
+//        cur = next
+//        next = next?.next
+//    }
+//    return dummy.next
+//}
+//
+//printList(deleteDuplicates(node1))
 //81. 搜索旋转排序数组 II
 //已知存在一个按非降序排列的整数数组 nums ，数组中的值不必互不相同。
 //在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转 ，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,4,4,5,6,6,7] 在下标 5 处经旋转后可能变为 [4,5,6,6,7,0,1,2,4,4] 。
