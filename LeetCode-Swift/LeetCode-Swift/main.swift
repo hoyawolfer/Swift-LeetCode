@@ -59,15 +59,404 @@ class TreeNode {
 }
 
 let tree_node_1 = TreeNode.init(1)
-let tree_node_2 = TreeNode.init(2)
+let tree_node_2 = TreeNode.init(1)
 let tree_node_3 = TreeNode.init(3)
 let tree_node_4 = TreeNode.init(4)
 let tree_node_5 = TreeNode.init(5)
 let tree_node_6 = TreeNode.init(6)
-tree_node_1.left = tree_node_2
-tree_node_1.right = tree_node_3
-tree_node_3.left = tree_node_4
-tree_node_3.right = tree_node_5
+tree_node_2.left = tree_node_1
+//tree_node_2.right = tree_node_4
+//tree_node_4.left = tree_node_3
+//tree_node_4.right = tree_node_5
+
+
+let new_tree_node_1 = TreeNode.init(1)
+let new_tree_node_2 = TreeNode.init(1)
+let new_tree_node_3 = TreeNode.init(3)
+let new_tree_node_4 = TreeNode.init(4)
+let new_tree_node_5 = TreeNode.init(5)
+let new_tree_node_6 = TreeNode.init(6)
+new_tree_node_2.right = new_tree_node_1
+//new_tree_node_2.right = new_tree_node_4
+//new_tree_node_4.left = new_tree_node_3
+//new_tree_node_4.right = new_tree_node_5
+
+
+//105. 从前序与中序遍历序列构造二叉树
+//根据一棵树的前序遍历与中序遍历构造二叉树。
+//注意:
+//你可以假设树中没有重复的元素。
+//例如，给出
+//前序遍历 preorder = [3,9,20,15,7]
+//中序遍历 inorder = [9,3,15,20,7]
+//返回如下的二叉树：
+//
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+
+func buildTree(_ preorder: [Int], _ inorder: [Int]) -> TreeNode? {
+    var inorder_map = [Int: Int]()
+    for i in 0..<inorder.count {
+        inorder_map[inorder[i]] = i
+    }
+    return myBuildTree(preorder, inorder, 0...(preorder.count - 1), 0...(preorder.count - 1), inorder_map)
+}
+
+func myBuildTree(_ preorder: [Int], _ inorder: [Int], _ preRange: ClosedRange<Int>, _ inRange: ClosedRange<Int>, _ map: [Int: Int]) -> TreeNode? {
+    if preRange.lowerBound > inRange.upperBound {
+        return nil
+    }
+    //前序遍历 的根结点
+    let preorder_root = preorder[preRange.lowerBound]
+    //中序遍历 的根结点
+    let inorder_root = map[preorder[preorder_root]]!
+    
+    //构造根结点
+    let root = TreeNode.init(preorder_root)
+    //求出左子树的长度
+    let left_length = inorder_root - inRange.lowerBound
+    root.left = myBuildTree(preorder, inorder, (preRange.lowerBound + 1)...(preRange.lowerBound + left_length), preRange.lowerBound...(inorder_root - 1), map)
+    root.right = myBuildTree(preorder, inorder, (preRange.lowerBound + left_length + 1)...preRange.upperBound, (inorder_root + 1)...inRange.upperBound, map)
+    return root
+}
+
+
+
+//104. 二叉树的最大深度
+//给定一个二叉树，找出其最大深度。
+//二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+//说明: 叶子节点是指没有子节点的节点。
+//示例：
+//给定二叉树 [3,9,20,null,null,15,7]，
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+//返回它的最大深度 3 。
+//BFS
+//func maxDepth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    var res = 0
+//    var queue = [TreeNode]()
+//    queue.append(root!)
+//    while queue.count != 0 {
+//        for _ in 0..<queue.count {
+//            let r = queue.removeFirst()
+//            if r.left != nil {
+//                queue.append(r.left!)
+//            }
+//            if r.right != nil {
+//                queue.append(r.right!)
+//            }
+//        }
+//        res += 1
+//    }
+//    return res
+//}
+//DFS
+//func maxDepth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    return max(maxDepth(root?.left), maxDepth(root?.right)) + 1
+//}
+//103. 二叉树的锯齿形层序遍历
+//给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+//例如：
+//给定二叉树 [3,9,20,null,null,15,7],
+//
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+//返回锯齿形层序遍历如下：
+//[
+//  [3],
+//  [20,9],
+//  [15,7]
+//]
+//func zigzagLevelOrder(_ root: TreeNode?) -> [[Int]] {
+//    if root == nil {
+//        return []
+//    }
+//    var res = [[Int]]()
+//    var queue = [TreeNode]()
+//    queue.append(root!)
+//    var direction = 1
+//    while queue.count != 0 {
+//        var level_list = [Int]()
+//        for i in (0..<queue.count).reversed() {
+//            let root = queue.remove(at: i)
+//            level_list.append(root.val)
+//            if direction == -1 {
+//                if root.right != nil {
+//                    queue.append(root.right!)
+//                }
+//                if root.left != nil {
+//                    queue.append(root.left!)
+//                }
+//            } else {
+//                if root.left != nil {
+//                    queue.append(root.left!)
+//                }
+//                if root.right != nil {
+//                    queue.append(root.right!)
+//                }
+//            }
+//        }
+//        direction = -direction
+//        res.append(level_list)
+//    }
+//    return res
+//}
+//102. 二叉树的层序遍历
+//给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+//示例：
+//二叉树：[3,9,20,null,null,15,7],
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+//返回其层序遍历结果：
+//[
+//  [3],
+//  [9,20],
+//  [15,7]
+//]
+//func levelOrder(_ root: TreeNode?) -> [[Int]] {
+//    if root == nil {
+//        return []
+//    }
+//    var res = [[Int]]()
+//    var queue = [TreeNode]()
+//    queue.append(root!)
+//    while queue.count != 0 {
+//        var level_list = [Int]()
+//        for _ in 0..<queue.count {
+//            let root = queue.removeFirst()
+//            level_list.append(root.val)
+//            if root.left != nil {
+//                queue.append(root.left!)
+//            }
+//            if root.right != nil {
+//                queue.append(root.right!)
+//            }
+//        }
+//        res.append(level_list)
+//    }
+//    return res
+//}
+
+//101. 对称二叉树
+//给定一个二叉树，检查它是否是镜像对称的。
+//例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+//
+//    1
+//   / \
+//  2   2
+// / \ / \
+//3  4 4  3
+//
+//但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+//
+//    1
+//   / \
+//  2   2
+//   \   \
+//   3    3
+//进阶：
+//你可以运用递归和迭代两种方法解决这个问题吗？
+//func isSymmetric(_ root: TreeNode?) -> Bool {
+//
+//    return compareTowNode(root?.left, root?.right)
+//}
+//
+//func compareTowNode(_ left: TreeNode?, _ right: TreeNode?) -> Bool {
+//    if left == nil && right == nil {
+//        return true
+//    }
+//    if left == nil || right == nil {
+//        return false
+//    }
+//    if left?.val != right?.val {
+//        return false
+//    }
+//    return compareTowNode(left?.left, right?.right) && compareTowNode(left?.right, right?.left)
+//}
+//func isSymmetric(_ root: TreeNode?) -> Bool {
+//    return check(root?.left, root?.right)
+//}
+//
+//func check(_ left: TreeNode?, _ right: TreeNode?) -> Bool {
+//    var link_list = [TreeNode]()
+//    if (left != nil && right == nil) || (left == nil && right != nil) {
+//        return false
+//    }
+//    link_list.append(left!)
+//    link_list.append(right!)
+//    while link_list.count != 0 {
+//        let left_n = link_list.removeFirst()
+//        let right_n = link_list.removeFirst()
+//
+//        if left_n.val != right_n.val {
+//            return false
+//        }
+//
+//        let l_l_n = left_n.left
+//        let r_r_n = right_n.right
+//        let l_r_n = left_n.right
+//        let r_l_n = right_n.left
+//
+//        if (l_l_n != nil && r_r_n == nil) || (l_l_n == nil && r_r_n != nil) {
+//            return false
+//        } else if l_l_n == nil && r_r_n == nil {
+//            continue
+//        } else {
+//            link_list.append(l_l_n!)
+//            link_list.append(r_r_n!)
+//        }
+//
+//        if (l_r_n != nil && r_l_n == nil) || (l_r_n == nil && r_l_n != nil) {
+//            return false
+//        } else if l_r_n == nil && r_l_n == nil {
+//            continue
+//        } else {
+//            link_list.append(l_r_n!)
+//            link_list.append(r_l_n!)
+//        }
+//    }
+//    return true
+//}
+
+//100. 相同的树
+//给你两棵二叉树的根节点 p 和 q ，编写一个函数来检验这两棵树是否相同。
+//如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+//示例 1：
+//输入：p = [1,2,3], q = [1,2,3]
+//输出：true
+//示例 2：
+//输入：p = [1,2], q = [1,null,2]
+//输出：false
+//示例 3：
+//输入：p = [1,2,1], q = [1,1,2]
+//输出：false
+//提示：
+//两棵树上的节点数目都在范围 [0, 100] 内
+//-104 <= Node.val <= 104
+
+//func isSameTree(_ p: TreeNode?, _ q: TreeNode?) -> Bool {
+//    var stack_p = [TreeNode]()
+//    var stack_q = [TreeNode]()
+//    var new_p = p
+//    var new_q = q
+//    while new_p != nil || stack_p.count != 0 || stack_q.count != 0 || new_q != nil {
+//        while new_p != nil {
+//            stack_p.append(new_p!)
+//            new_p = new_p?.left
+//        }
+//
+//        while new_q != nil {
+//            stack_q.append(new_q!)
+//            new_q = new_q?.left
+//        }
+//
+//        let p_root = stack_p.popLast()
+//        let q_root = stack_q.popLast()
+//
+//        if stack_p.count != stack_q.count || p_root?.val != q_root?.val {
+//            return false
+//        }
+//        new_p = p_root?.right
+//        new_q = q_root?.right
+//    }
+//    return true
+//}
+//func isSameTree(_ p: TreeNode?, _ q: TreeNode?) -> Bool {
+//    if p == nil && q == nil {
+//        return true
+//    }
+//    if p == nil || q == nil {
+//        return false
+//    }
+//    if p?.val != q?.val {
+//        return false
+//    }
+//    return isSameTree(p?.left, q?.left) && isSameTree(p?.right, q?.right)
+//}
+//print(isSameTree(tree_node_2, new_tree_node_2))
+//98. 验证二叉搜索树
+//给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+//假设一个二叉搜索树具有如下特征：
+//节点的左子树只包含小于当前节点的数。
+//节点的右子树只包含大于当前节点的数。
+//所有左子树和右子树自身必须也是二叉搜索树。
+//示例 1:
+//输入:
+//    2
+//   / \
+//  1   3
+//输出: true
+//示例 2:
+//输入:
+//    5
+//   / \
+//  1   4
+//     / \
+//    3   6
+//输出: false
+//解释: 输入为: [5,1,4,null,null,3,6]。
+//     根节点的值为 5 ，但是其右子节点值为 4 。
+//迭代法
+//func isValidBST(_ root: TreeNode?) -> Bool {
+//    var stack = [TreeNode]()
+//    var res = Int(Int.min)
+//    var r = root
+//    while r != nil || stack.count != 0 {
+//        while r != nil {
+//            stack.append(r!)
+//            r = r?.left
+//        }
+//        let top = stack.popLast()
+//        if top!.val <= res {
+//            return false
+//        }
+//        res = top!.val
+//        r = top?.right
+//    }
+//    return true
+//}
+//递归法
+//func isValidBST(_ root: TreeNode?) -> Bool {
+//    var res = true
+//    var pre = Int(Int.min)
+//    inOrder(root, &res, &pre)
+//    return res
+//}
+//
+//func inOrder(_ root: TreeNode?, _ res: inout Bool, _ pre: inout Int) {
+//    if root == nil {
+//        return
+//    }
+//
+//    inOrder(root?.left, &res, &pre)
+//    if root!.val <= pre {
+//        res = false
+//        return
+//    }
+//    pre = root!.val
+//    inOrder(root?.right, &res, &pre)
+//}
+//
+//
+//print(isValidBST(tree_node_2))
 
 //95. 不同的二叉搜索树 II
 //给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
@@ -93,9 +482,9 @@ tree_node_3.right = tree_node_5
 //提示：
 //0 <= n <= 8
 
-func generateTrees(_ n: Int) -> [TreeNode?] {
-    
-}
+//func generateTrees(_ n: Int) -> [TreeNode?] {
+//
+//}
 //94. 二叉树的中序遍历
 //递归法
 //func inorderTraversal(_ root: TreeNode?) -> [Int] {
