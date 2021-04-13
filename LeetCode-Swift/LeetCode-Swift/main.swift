@@ -81,6 +81,109 @@ new_tree_node_2.right = new_tree_node_1
 //new_tree_node_4.left = new_tree_node_3
 //new_tree_node_4.right = new_tree_node_5
 
+//108. 将有序数组转换为二叉搜索树
+//给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+//高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+//示例 1：
+//输入：nums = [-10,-3,0,5,9]
+//输出：[0,-3,9,-10,null,5]
+//解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：
+//示例 2：
+//输入：nums = [1,3]
+//输出：[3,1]
+//解释：[1,3] 和 [3,1] 都是高度平衡二叉搜索树。
+//提示：
+//1 <= nums.length <= 104
+//-104 <= nums[i] <= 104
+//nums 按 严格递增 顺序排列
+func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
+    
+}
+//107. 二叉树的层序遍历 II
+//给定一个二叉树，返回其节点值自底向上的层序遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+//例如：
+//给定二叉树 [3,9,20,null,null,15,7],
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+//返回其自底向上的层序遍历为：
+//[
+//  [15,7],
+//  [9,20],
+//  [3]
+//]
+
+//func levelOrderBottom(_ root: TreeNode?) -> [[Int]] {
+//    if root == nil {
+//        return []
+//    }
+//    var queue = [TreeNode]()
+//    var res = [[Int]]()
+//    queue.append(root!)
+//    while queue.count != 0 {
+//        let size = queue.count
+//        var list = [Int]()
+//        for _ in 0..<size {
+//            let r = queue.removeFirst()
+//            if r.left != nil {
+//                queue.append(r.left!)
+//            }
+//            if r.right != nil {
+//                queue.append(r.right!)
+//            }
+//            list.append(r.val)
+//        }
+//        res.insert(list, at: 0)
+//    }
+//    return res
+//}
+//106. 从中序与后序遍历序列构造二叉树
+//根据一棵树的中序遍历与后序遍历构造二叉树。
+//注意:
+//你可以假设树中没有重复的元素。
+//例如，给出
+//中序遍历 inorder = [9,3,15,20,7]
+//后序遍历 postorder = [9,15,7,20,3]
+//返回如下的二叉树：
+//
+//    3
+//   / \
+//  9  20
+//    /  \
+//   15   7
+
+//func buildTree(_ inorder: [Int], _ postorder: [Int]) -> TreeNode? {
+//    var inorder_map = [Int: Int]()
+//    for i in 0..<inorder.count {
+//        inorder_map[inorder[i]] = i
+//    }
+//    return myBuildTree(postorder, inorder, 0, postorder.count - 1, 0, inorder.count - 1, inorder_map)
+//}
+//
+//func myBuildTree(_ postorder: [Int], _ inorder: [Int], _ postorder_left: Int, _ postorder_right: Int, _ inorder_left: Int, _ inorder_right: Int, _ map: [Int: Int]) -> TreeNode? {
+//    if postorder_left > postorder_right || inorder_left > inorder_right {
+//        return nil
+//    }
+//    //后序遍历 的根结点
+//    let postorder_root = postorder[postorder_right]
+//    //中序遍历 的根结点
+//    let inorder_root = map[postorder_root]!
+//    //求出左子树的长度
+//    let right_length = inorder_right - inorder_root
+//
+//    //构造根结点
+//    let root = TreeNode.init(postorder_root)
+//    root.right = myBuildTree(postorder, inorder, postorder_right - right_length, postorder_right - 1, inorder_root + 1, inorder_right, map)
+//
+//    root.left = myBuildTree(postorder, inorder, postorder_left, postorder_right - right_length - 1, inorder_left, inorder_root - 1, map)
+//    return root
+//}
+//let tree = buildTree([9,3,15,20,7], [9,15,7,20,3])
+//
+//print(tree?.val)
+
 
 //105. 从前序与中序遍历序列构造二叉树
 //根据一棵树的前序遍历与中序遍历构造二叉树。
@@ -97,32 +200,35 @@ new_tree_node_2.right = new_tree_node_1
 //    /  \
 //   15   7
 
-func buildTree(_ preorder: [Int], _ inorder: [Int]) -> TreeNode? {
-    var inorder_map = [Int: Int]()
-    for i in 0..<inorder.count {
-        inorder_map[inorder[i]] = i
-    }
-    return myBuildTree(preorder, inorder, 0...(preorder.count - 1), 0...(preorder.count - 1), inorder_map)
-}
-
-func myBuildTree(_ preorder: [Int], _ inorder: [Int], _ preRange: ClosedRange<Int>, _ inRange: ClosedRange<Int>, _ map: [Int: Int]) -> TreeNode? {
-    if preRange.lowerBound > inRange.upperBound {
-        return nil
-    }
-    //前序遍历 的根结点
-    let preorder_root = preorder[preRange.lowerBound]
-    //中序遍历 的根结点
-    let inorder_root = map[preorder[preorder_root]]!
-    
-    //构造根结点
-    let root = TreeNode.init(preorder_root)
-    //求出左子树的长度
-    let left_length = inorder_root - inRange.lowerBound
-    root.left = myBuildTree(preorder, inorder, (preRange.lowerBound + 1)...(preRange.lowerBound + left_length), preRange.lowerBound...(inorder_root - 1), map)
-    root.right = myBuildTree(preorder, inorder, (preRange.lowerBound + left_length + 1)...preRange.upperBound, (inorder_root + 1)...inRange.upperBound, map)
-    return root
-}
-
+//func buildTree(_ preorder: [Int], _ inorder: [Int]) -> TreeNode? {
+//    var inorder_map = [Int: Int]()
+//    for i in 0..<inorder.count {
+//        inorder_map[inorder[i]] = i
+//    }
+//    return myBuildTree(preorder, inorder, 0, preorder.count - 1, 0, preorder.count - 1, inorder_map)
+//}
+//
+//func myBuildTree(_ preorder: [Int], _ inorder: [Int], _ preorder_left: Int, _ preorder_right: Int, _ inorder_left: Int, _ inorder_right: Int, _ map: [Int: Int]) -> TreeNode? {
+//    if preorder_left > preorder_right {
+//        return nil
+//    }
+//    //前序遍历 的根结点
+//    let preorder_root = preorder[preorder_left]
+//    //中序遍历 的根结点
+//    let inorder_root = map[preorder_root]!
+//    //求出左子树的长度
+//    let left_length = inorder_root - inorder_left
+//
+//    //构造根结点
+//    let root = TreeNode.init(preorder_root)
+//    root.left = myBuildTree(preorder, inorder, preorder_left + 1, preorder_left + left_length, inorder_left, inorder_root - 1, map)
+//    root.right = myBuildTree(preorder, inorder, preorder_left + left_length + 1, preorder_right, inorder_root + 1, inorder_right, map)
+//    return root
+//}
+//
+//let tree = buildTree([3,9,20,15,7], [9,3,15,20,7])
+//
+//print(tree?.val)
 
 
 //104. 二叉树的最大深度
