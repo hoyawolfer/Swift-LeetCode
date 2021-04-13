@@ -81,6 +81,36 @@ new_tree_node_2.right = new_tree_node_1
 //new_tree_node_4.left = new_tree_node_3
 //new_tree_node_4.right = new_tree_node_5
 
+func sortedListToBST(_ head: ListNode?) -> TreeNode? {
+    var length = 0
+    var p = head
+    while p != nil {
+        length += 1
+        p = p?.next
+    }
+    var middle = length / 2
+    var middle_p = head
+    let tree_node_left = TreeNode.init(head!.val)
+    var left = tree_node_left
+    while middle < 0 {
+        middle -= 1
+        middle_p = middle_p?.next
+        let node = TreeNode.init(middle_p!.val)
+        node.left = left
+        left = node
+    }
+    var root = left
+    var right = root
+    while middle_p != nil {
+        let node = TreeNode.init(middle_p!.val)
+        right.right = node
+        right = node
+        middle_p = middle_p?.next
+    }
+    return root
+}
+
+
 //108. 将有序数组转换为二叉搜索树
 //给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
 //高度平衡 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
@@ -96,9 +126,27 @@ new_tree_node_2.right = new_tree_node_1
 //1 <= nums.length <= 104
 //-104 <= nums[i] <= 104
 //nums 按 严格递增 顺序排列
-func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
-    
-}
+//func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
+//    if nums.count == 0 {
+//        return nil
+//    }
+//    if nums.count == 1 {
+//        return TreeNode.init(nums[0])
+//    }
+//    let middle = nums.count / 2
+//    let root = TreeNode.init(nums[middle])
+//    root.left = sortedArrayToBST(Array(nums[0..<middle]))
+//
+//    if middle >= nums.count - 1 {
+//        root.right = nil
+//    } else {
+//        root.right = sortedArrayToBST(Array(nums[(middle + 1)..<nums.count]))
+//    }
+//    return root
+//}
+//
+//let root = sortedArrayToBST([-10,-3,0,5,9])
+//print(root)
 //107. 二叉树的层序遍历 II
 //给定一个二叉树，返回其节点值自底向上的层序遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
 //例如：
