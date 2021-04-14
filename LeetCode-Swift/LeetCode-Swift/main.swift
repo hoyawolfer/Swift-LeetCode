@@ -13,11 +13,11 @@ class ListNode {
     public init(_ val: Int) { self.val = val; self.next = nil; }
     public init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next; }
 }
-let node1 = ListNode.init(1)
-let node2 = ListNode.init(2)
-let node3 = ListNode.init(3)
-let node4 = ListNode.init(4)
-let node5 = ListNode.init(5)
+let node1 = ListNode.init(-10)
+let node2 = ListNode.init(-3)
+let node3 = ListNode.init(0)
+let node4 = ListNode.init(5)
+let node5 = ListNode.init(9)
 //
 //let node11 = ListNode.init(1)
 //let node13 = ListNode.init(3)
@@ -65,9 +65,9 @@ let tree_node_4 = TreeNode.init(4)
 let tree_node_5 = TreeNode.init(5)
 let tree_node_6 = TreeNode.init(6)
 tree_node_2.left = tree_node_1
-//tree_node_2.right = tree_node_4
-//tree_node_4.left = tree_node_3
-//tree_node_4.right = tree_node_5
+tree_node_2.right = tree_node_4
+tree_node_4.left = tree_node_3
+tree_node_4.right = tree_node_5
 
 
 let new_tree_node_1 = TreeNode.init(1)
@@ -81,35 +81,240 @@ new_tree_node_2.right = new_tree_node_1
 //new_tree_node_4.left = new_tree_node_3
 //new_tree_node_4.right = new_tree_node_5
 
-func sortedListToBST(_ head: ListNode?) -> TreeNode? {
-    var length = 0
-    var p = head
-    while p != nil {
-        length += 1
-        p = p?.next
+func createTree(_ nums: [Int?]) -> TreeNode? {
+    var floor = 0
+    var count = 0
+    var treeNodes = [TreeNode?](repeating: nil, count: nums.count)
+    var lastNullNodeNum = 0
+    while nums.count != 0 && count < nums.count {
+        let start = Int(powf(2, Float(floor))) - 1
+        var end = Int(powf(2, Float(floor + 1))) - 1 - lastNullNodeNum * 2
+        if end > nums.count {
+            end = nums.count
+        }
+        for i in start..<end {
+            if nums[i] != nil {
+                treeNodes[i] = TreeNode.init(nums[i]!)
+            } else {
+                lastNullNodeNum += 1
+            }
+            if i > 0 {
+                let parent = (i - 1) / 2
+                if parent >= 0 {
+                    let pNode = treeNodes[parent]
+                    if pNode != nil {
+                        if i % 2 == 1 {
+                            pNode?.left = treeNodes[i]
+                        } else {
+                            pNode?.right = treeNodes[i]
+                        }
+                    }
+                }
+            }
+            count += 1
+        }
+        floor += 1
     }
-    var middle = length / 2
-    var middle_p = head
-    let tree_node_left = TreeNode.init(head!.val)
-    var left = tree_node_left
-    while middle < 0 {
-        middle -= 1
-        middle_p = middle_p?.next
-        let node = TreeNode.init(middle_p!.val)
-        node.left = left
-        left = node
-    }
-    var root = left
-    var right = root
-    while middle_p != nil {
-        let node = TreeNode.init(middle_p!.val)
-        right.right = node
-        right = node
-        middle_p = middle_p?.next
-    }
-    return root
+    return treeNodes[0]
 }
 
+let n = createTree([5,4,8,11,nil,13,4,7,2,nil,nil,5,1])
+print(n)
+//112. 路径总和
+//给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。
+//叶子节点 是指没有子节点的节点。
+//示例 1：
+//输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+//输出：true
+//示例 2：
+//输入：root = [1,2,3], targetSum = 5
+//输出：false
+//示例 3：
+//输入：root = [1,2], targetSum = 0
+//输出：false
+//深度优先遍历
+//func hasPathSum(_ root: TreeNode?, _ targetSum: Int) -> Bool {
+//    if root == nil {
+//        return false
+//    }
+//    if root?.left == nil && root?.right == nil {
+//        return targetSum == root!.val
+//    }
+//    return hasPathSum(root?.left, targetSum - root!.val) || hasPathSum(root?.right, targetSum - root!.val)
+//}
+
+//
+func hasPathSum(_ root: TreeNode?, _ targetSum: Int) -> Bool {
+    if root == nil {
+        return false
+    }
+    if root?.left == nil && root?.right == nil {
+        return targetSum == root!.val
+    }
+    return hasPathSum(root?.left, targetSum - root!.val) || hasPathSum(root?.right, targetSum - root!.val)
+}
+
+//111. 二叉树的最小深度
+//给定一个二叉树，找出其最小深度。
+//最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+//说明：叶子节点是指没有子节点的节点。
+//示例 1：
+//输入：root = [3,9,20,null,null,15,7]
+//输出：2
+//示例 2：
+//输入：root = [2,null,3,null,4,null,5,null,6]
+//输出：5
+//func minDepth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    if root?.left == nil && root?.right == nil {
+//        return 1
+//    }
+//    if root?.left == nil && root?.right != nil {
+//        return minDepth(root?.right) + 1
+//    }
+//    if root?.right == nil && root?.left != nil {
+//        return minDepth(root?.left) + 1
+//    }
+//    return min(minDepth(root?.left), minDepth(root?.right)) + 1
+//}
+//func minDepth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    if root?.left == nil && root?.right == nil {
+//        return 1
+//    }
+//    var min_depth = Int(Int.max)
+//    if root?.left != nil {
+//        min_depth = min(minDepth(root?.left), min_depth)
+//    }
+//    if root?.right != nil {
+//        min_depth = min(minDepth(root?.right), min_depth)
+//    }
+//    return min_depth + 1
+//}
+
+//广度优先遍历
+//func minDepth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    var queue = [[String: Any]]()
+//    queue.append(["TreeNode": root!, "Depth": 1])
+//    while queue.count != 0 {
+//        let size = queue.count
+//        for _ in 0..<size {
+//            let map = queue.removeFirst()
+//            let r = map["TreeNode"] as! TreeNode
+//            let depth = map["Depth"] as! Int
+//            if r.left == nil && r.right == nil {
+//                return depth
+//            }
+//            if r.left != nil {
+//                queue.append(["TreeNode": r.left!, "Depth": depth + 1])
+//            }
+//            if r.right != nil {
+//                queue.append(["TreeNode": r.right!, "Depth": depth + 1])
+//            }
+//        }
+//    }
+//    return 0
+//}
+//
+//print(minDepth(tree_node_2))
+
+//110. 平衡二叉树
+//给定一个二叉树，判断它是否是高度平衡的二叉树。
+//本题中，一棵高度平衡二叉树定义为：
+//一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1 。
+//示例 1：
+//输入：root = [3,9,20,null,null,15,7]
+//输出：true
+//示例 2：
+//输入：root = [1,2,2,3,3,null,null,4,4]
+//输出：false
+//示例 3：
+//输入：root = []
+//输出：true
+
+//自底向上
+//func isBalanced(_ root: TreeNode?) -> Bool {
+//    return dfs(root) != -1
+//}
+//
+//func dfs(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    let left = dfs(root?.left)
+//    if left == -1 {
+//        return -1
+//    }
+//    let right = dfs(root?.right)
+//    if right == -1 {
+//        return -1
+//    }
+//    let abs_lr = abs(left - right)
+//    return abs_lr < 2 ? max(left, right) + 1 : -1
+//}
+//自顶向下
+//func isBalanced(_ root: TreeNode?) -> Bool {
+//    if root == nil {
+//        return true
+//    }
+//    return abs((depth(root?.left) - depth(root?.right))) < 2 && isBalanced(root?.left) && isBalanced(root?.right)
+//}
+//
+//func depth(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    return max(depth(root?.left), depth(root?.right)) + 1
+//}
+
+
+
+//109. 有序链表转换二叉搜索树
+//给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+//本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+//示例:
+//给定的有序链表： [-10, -3, 0, 5, 9],
+//一个可能的答案是：[0, -3, 9, -10, null, 5], 它可以表示下面这个高度平衡二叉搜索树：
+//
+//      0
+//     / \
+//   -3   9
+//   /   /
+// -10  5
+
+//func sortedListToBST(_ head: ListNode?) -> TreeNode? {
+//    return buildTree(head, nil)
+//}
+//
+//func buildTree(_ left: ListNode?, _ right: ListNode?) -> TreeNode? {
+//    if left != nil && right != nil && left!.val == right!.val {
+//        return nil
+//    }
+//    if left == nil && right == nil {
+//        return nil
+//    }
+//    var mid = left
+//    var r = left
+//    while r?.val != right?.val && r?.next?.val != right?.val {
+//        mid = mid?.next
+//        r = r?.next
+//        r = r?.next
+//    }
+//    let root = TreeNode.init(mid!.val)
+//    root.left = buildTree(left, mid)
+//    root.right = buildTree(mid?.next, right)
+//    return root
+//}
+//
+//let root = sortedListToBST(node1)
+//print(root)
 
 //108. 将有序数组转换为二叉搜索树
 //给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
