@@ -58,6 +58,22 @@ class TreeNode {
     }
 }
 
+
+// Definition for a Node.
+class Node {
+    var val: Int
+    var left: Node?
+    var right: Node?
+    var next: Node?
+    init(_ val: Int) {
+        self.val = val
+        self.left = nil
+        self.right = nil
+        self.next = nil
+    }
+}
+
+
 let tree_node_1 = TreeNode.init(1)
 let tree_node_2 = TreeNode.init(1)
 let tree_node_3 = TreeNode.init(3)
@@ -80,23 +96,19 @@ new_tree_node_2.right = new_tree_node_1
 //new_tree_node_2.right = new_tree_node_4
 //new_tree_node_4.left = new_tree_node_3
 //new_tree_node_4.right = new_tree_node_5
-
 func createTree(_ nums: [Int?]) -> TreeNode? {
     var floor = 0
     var count = 0
     var treeNodes = [TreeNode?](repeating: nil, count: nums.count)
-    var lastNullNodeNum = 0
     while nums.count != 0 && count < nums.count {
         let start = Int(powf(2, Float(floor))) - 1
-        var end = Int(powf(2, Float(floor + 1))) - 1 - lastNullNodeNum * 2
+        var end = Int(powf(2, Float(floor + 1))) - 1
         if end > nums.count {
             end = nums.count
         }
         for i in start..<end {
             if nums[i] != nil {
                 treeNodes[i] = TreeNode.init(nums[i]!)
-            } else {
-                lastNullNodeNum += 1
             }
             if i > 0 {
                 let parent = (i - 1) / 2
@@ -117,9 +129,271 @@ func createTree(_ nums: [Int?]) -> TreeNode? {
     }
     return treeNodes[0]
 }
+//
+//let n = createTree([5,4,8,11,nil,13,4,7,2,nil,nil,nil,nil,5,1])
+let n = createTree([1,2,5,3,4,nil,6])
 
-let n = createTree([5,4,8,11,nil,13,4,7,2,nil,nil,5,1])
-print(n)
+//120. 三角形最小路径和
+//给定一个三角形 triangle ，找出自顶向下的最小路径和。
+//每一步只能移动到下一行中相邻的结点上。相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。也就是说，如果正位于当前行的下标 i ，那么下一步可以移动到下一行的下标 i 或 i + 1 。
+//示例 1：
+//输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
+//输出：11
+//解释：如下面简图所示：
+//   2
+//  3 4
+// 6 5 7
+//4 1 8 3
+//自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+//示例 2：
+//输入：triangle = [[-10]]
+//输出：-10
+//提示：
+//1 <= triangle.length <= 200
+//triangle[0].length == 1
+//triangle[i].length == triangle[i - 1].length + 1
+//-104 <= triangle[i][j] <= 104
+//进阶：
+//你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题吗？
+func minimumTotal(_ triangle: [[Int]]) -> Int {
+    
+}
+//119. 杨辉三角 II
+//给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+//
+//
+//
+//在杨辉三角中，每个数是它左上方和右上方的数的和。
+//
+//示例:
+//
+//输入: 3
+//输出: [1,3,3,1]
+//进阶：
+//
+//你可以优化你的算法到 O(k) 空间复杂度吗？
+
+//func getRow(_ rowIndex: Int) -> [Int] {
+//    if rowIndex == 0 {
+//        return [1]
+//    }
+//    var last_path = [1]
+//    for i in 1...rowIndex {
+//        var path = [Int]()
+//        for j in 0...i {
+//            if j == 0 {
+//                path.append(1)
+//            } else if j == i {
+//                path.append(1)
+//            } else {
+//                path.append(last_path[j - 1] + last_path[j])
+//            }
+//        }
+//        last_path = path
+//    }
+//    return last_path
+//}
+//118. 杨辉三角
+//给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+//在杨辉三角中，每个数是它左上方和右上方的数的和。
+//示例:
+//输入: 5
+//输出:
+//[
+//     [1],
+//    [1,1],
+//   [1,2,1],
+//  [1,3,3,1],
+// [1,4,6,4,1]
+//]
+
+//func generate(_ numRows: Int) -> [[Int]] {
+//    var res = [[Int]]()
+//    res.append([1])
+//    for i in 1..<numRows {
+//        let last_path = res.last
+//        var path = [Int]()
+//        for j in 0...i {
+//            if j == 0 {
+//                path.append(1)
+//            } else if j == i {
+//                path.append(1)
+//            } else {
+//                path.append(last_path![j - 1] + last_path![j])
+//            }
+//        }
+//        res.append(path)
+//    }
+//    return res
+//}
+//print(generate(8))
+//117. 填充每个节点的下一个右侧节点指针 II
+//给定一个二叉树
+//填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+//初始状态下，所有 next 指针都被设置为 NULL。
+//进阶：
+//你只能使用常量级额外空间。
+//使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+//示例：
+//输入：root = [1,2,3,4,5,null,7]
+//输出：[1,#,2,3,#,4,5,7,#]
+//解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化输出按层序遍历顺序（由 next 指针连接），'#' 表示每层的末尾。
+//提示：
+//树中的节点数小于 6000
+//-100 <= node.val <= 100
+//func connect(_ root: Node?) -> Node? {
+//    if root == nil {
+//        return nil
+//    }
+//    var cur = root
+//
+//    while cur != nil {
+//        let dummy = Node.init(0)
+//        var pre = dummy
+//        while cur != nil {
+//            if cur?.left != nil {
+//                pre.next = cur?.left
+//                pre = pre.next!
+//            }
+//            if cur?.right != nil {
+//                pre.next = cur?.right
+//                pre = pre.next!
+//            }
+//            cur = cur?.next
+//        }
+//        cur = dummy.next
+//    }
+//    return root
+//}
+//116. 填充每个节点的下一个右侧节点指针
+//给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+//struct Node {
+//  int val;
+//  Node *left;
+//  Node *right;
+//  Node *next;
+//}
+//填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+//初始状态下，所有 next 指针都被设置为 NULL。
+//进阶：
+//你只能使用常量级额外空间。
+//使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。
+//示例：
+//输入：root = [1,2,3,4,5,6,7]
+//输出：[1,#,2,3,#,4,5,6,7,#]
+//解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。
+//提示：
+//树中节点的数量少于 4096
+//-1000 <= node.val <= 1000
+
+//func connect(_ root: Node?) -> Node? {
+//    if root == nil {
+//        return nil
+//    }
+//    var queue = [Node]()
+//    var prev: Node?
+//    queue.append(root!)
+//    while queue.count != 0 {
+//        let size = queue.count
+//        prev = nil
+//        for _ in 0..<size {
+//            let r = queue.removeFirst()
+//            if prev != nil {
+//                prev?.next = r
+//            }
+//            prev = r
+//            if r.left != nil {
+//                queue.append(r.left!)
+//            }
+//            if r.right != nil {
+//                queue.append(r.right!)
+//            }
+//        }
+//    }
+//    return root
+//}
+
+//114. 二叉树展开为链表
+//给你二叉树的根结点 root ，请你将它展开为一个单链表：
+//展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+//展开后的单链表应该与二叉树 先序遍历 顺序相同。
+//示例 1：
+//输入：root = [1,2,5,3,4,null,6]
+//输出：[1,null,2,null,3,null,4,null,5,null,6]
+//示例 2：
+//输入：root = []
+//输出：[]
+//示例 3：
+//输入：root = [0]
+//输出：[0]
+
+//func flatten(_ root: TreeNode?) {
+//    if root == nil {
+//        return
+//    }
+//    var stack = [TreeNode]()
+//    stack.append(root!)
+//    var prev: TreeNode?
+//    while stack.count != 0 {
+//        let cur = stack.popLast()
+//        if prev != nil {
+//            prev?.left = nil
+//            prev?.right = cur
+//        }
+//        if cur?.right != nil {
+//            stack.append(cur!.right!)
+//        }
+//        if cur?.left != nil {
+//            stack.append(cur!.left!)
+//        }
+//        prev = cur
+//    }
+//}
+//flatten(n)
+//113. 路径总和 II
+//给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+//叶子节点 是指没有子节点的节点。
+//示例 1：
+//输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+//输出：[[5,4,11,2],[5,8,4,5]]
+//示例 2：
+//输入：root = [1,2,3], targetSum = 5
+//输出：[]
+//示例 3：
+//输入：root = [1,2], targetSum = 0
+//输出：[]
+//func pathSum(_ root: TreeNode?, _ targetSum: Int) -> [[Int]] {
+//    if root == nil {
+//        return []
+//    }
+//    var results = [[Int]]()
+//    var path = [Int]()
+//    path.append(root!.val)
+//    dfs(root, targetSum, &path, &results)
+//    return results
+//}
+//
+//func dfs(_ root: TreeNode?, _ targetSum: Int, _ path: inout [Int], _ results: inout [[Int]]) {
+//    if root?.left == nil && root?.right == nil {
+//        if targetSum - root!.val == 0 {
+//            results.append(path)
+//        }
+//        return
+//    }
+//    if root?.left != nil {
+//        path.append(root!.left!.val)
+//        dfs(root?.left, targetSum - root!.val, &path, &results)
+//        path.removeLast()
+//    }
+//
+//    if root?.right != nil {
+//        path.append(root!.right!.val)
+//        dfs(root?.right, targetSum - root!.val, &path, &results)
+//        path.removeLast()
+//    }
+//}
+//print(pathSum(n, 22))
+//print(n)
 //112. 路径总和
 //给你二叉树的根节点 root 和一个表示目标和的整数 targetSum ，判断该树中是否存在 根节点到叶子节点 的路径，这条路径上所有节点值相加等于目标和 targetSum 。
 //叶子节点 是指没有子节点的节点。
@@ -144,15 +418,15 @@ print(n)
 //}
 
 //
-func hasPathSum(_ root: TreeNode?, _ targetSum: Int) -> Bool {
-    if root == nil {
-        return false
-    }
-    if root?.left == nil && root?.right == nil {
-        return targetSum == root!.val
-    }
-    return hasPathSum(root?.left, targetSum - root!.val) || hasPathSum(root?.right, targetSum - root!.val)
-}
+//func hasPathSum(_ root: TreeNode?, _ targetSum: Int) -> Bool {
+//    if root == nil {
+//        return false
+//    }
+//    if root?.left == nil && root?.right == nil {
+//        return targetSum == root!.val
+//    }
+//    return hasPathSum(root?.left, targetSum - root!.val) || hasPathSum(root?.right, targetSum - root!.val)
+//}
 
 //111. 二叉树的最小深度
 //给定一个二叉树，找出其最小深度。
