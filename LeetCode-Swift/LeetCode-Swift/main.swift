@@ -131,7 +131,239 @@ func createTree(_ nums: [Int?]) -> TreeNode? {
 }
 //
 //let n = createTree([5,4,8,11,nil,13,4,7,2,nil,nil,nil,nil,5,1])
-let n = createTree([1,2,5,3,4,nil,6])
+let n = createTree([4,9,0,5,1])
+
+//130. 被围绕的区域
+//给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+//示例 1：
+//输入：board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+//输出：[["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+//解释：被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+//示例 2：
+//输入：board = [["X"]]
+//输出：[["X"]]
+func solve(_ board: inout [[Character]]) {
+    
+}
+//129. 求根节点到叶节点数字之和
+//给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
+//每条从根节点到叶节点的路径都代表一个数字：
+//例如，从根节点到叶节点的路径 1 -> 2 -> 3 表示数字 123 。
+//计算从根节点到叶节点生成的 所有数字之和 。
+//叶节点 是指没有子节点的节点。
+//示例 1：
+//输入：root = [1,2,3]
+//输出：25
+//解释：
+//从根到叶子节点路径 1->2 代表数字 12
+//从根到叶子节点路径 1->3 代表数字 13
+//因此，数字总和 = 12 + 13 = 25
+//示例 2：
+//输入：root = [4,9,0,5,1]
+//输出：1026
+//解释：
+//从根到叶子节点路径 4->9->5 代表数字 495
+//从根到叶子节点路径 4->9->1 代表数字 491
+//从根到叶子节点路径 4->0 代表数字 40
+//因此，数字总和 = 495 + 491 + 40 = 1026
+//func sumNumbers(_ root: TreeNode?) -> Int {
+//    if root == nil {
+//        return 0
+//    }
+//    var results = 0
+//    var path = 0
+//    path = root!.val
+//    dfs(root, &results, &path)
+//    return results
+//}
+//
+//func dfs(_ root: TreeNode?, _ results: inout Int, _ path: inout Int) {
+//    if root?.left == nil && root?.right == nil {
+//        results += path
+//        return
+//    }
+//    if root?.left != nil {
+//        path = path * 10 + root!.left!.val
+//        dfs(root?.left, &results, &path)
+//        path = (path - root!.left!.val) / 10
+//    }
+//
+//    if root?.right != nil {
+//        path = path * 10 + root!.right!.val
+//        dfs(root?.right, &results, &path)
+//        path = (path - root!.right!.val) / 10
+//    }
+//}
+//print(sumNumbers(n))
+
+//128. 最长连续序列
+//给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+//进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？
+//示例 1：
+//输入：nums = [100,2,200,1,3,4]
+//输出：4
+//解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+//示例 2：
+//输入：nums = [0,3,7,2,5,8,4,6,0,1]
+//输出：9
+//提示：
+//0 <= nums.length <= 104
+//-109 <= nums[i] <= 109
+
+//func longestConsecutive(_ nums: [Int]) -> Int {
+//    var hashSet = Set<Int>.init(minimumCapacity: nums.count)
+//    for num in nums {
+//        hashSet.insert(num)
+//    }
+//    var longest = 0
+//    for num in hashSet {
+//        if !hashSet.contains(num - 1) {
+//            var currentNum = num
+//            var currentStreak = 1
+//            while hashSet.contains(currentNum + 1) {
+//                currentNum += 1
+//                currentStreak += 1
+//            }
+//            longest = max(longest, currentStreak)
+//        }
+//    }
+//    return longest
+//}
+//print(longestConsecutive([0,3,7,2,5,8,4,6,0,1]))
+//125. 验证回文串
+//给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+//说明：本题中，我们将空字符串定义为有效的回文串。
+//示例 1:
+//输入: "A man, a plan, a canal: Panama"
+//输出: true
+//示例 2:
+//输入: "race a car"
+//输出: false
+//func isPalindrome(_ s: String) -> Bool {
+//
+//    let str = Array(s.lowercased().replacingOccurrences(of: " ", with: ""))
+//    var left = 0
+//    var right = str.count - 1
+//    let zero = ("0" as Character).asciiValue!
+//    let nine = ("9" as Character).asciiValue!
+//    let a = ("a" as Character).asciiValue!
+//    let z = ("z" as Character).asciiValue!
+//    let count = str.count
+//    while left < right {
+//        while left < count && left <= right && !((str[left].asciiValue! >= zero && str[left].asciiValue! <= nine) || (str[left].asciiValue! >= a && str[left].asciiValue! <= z)) {
+//            left += 1
+//            if left == count || left == right {
+//                return true
+//            }
+//        }
+//        while right > 0 && !((str[right].asciiValue! >= zero && str[right].asciiValue! <= nine) || (str[right].asciiValue! >= a && str[right].asciiValue! <= z)) {
+//            right -= 1
+//        }
+//        if left <= right && str[left] == str[right] {
+//            left += 1
+//            right -= 1
+//        } else {
+//            return false
+//        }
+//    }
+//    return true
+//}
+//print(isPalindrome(".,"))
+//123. 买卖股票的最佳时机 III
+//给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+//设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+//注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+//示例 1:
+//输入：prices = [0,0,3,1,4,1,5]
+//输出：6
+//解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+//     随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+//示例 2：
+//输入：prices = [1,2,3,4,5]
+//输出：4
+//解释：在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+//     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+//     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+//示例 3：
+//输入：prices = [7,6,4,3,1]
+//输出：0
+//解释：在这个情况下, 没有交易完成, 所以最大利润为 0。
+//示例 4：
+//输入：prices = [1]
+//输出：0
+//func maxProfit(_ prices: [Int]) -> Int {
+//
+//}
+//122. 买卖股票的最佳时机 II
+//给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+//设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+//注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+//示例 1:
+//输入: [7,1,5,3,6,4]
+//输出: 7
+//解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+//     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+//示例 2:
+//输入: [1,2,3,4,5]
+//输出: 4
+//解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+//     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+//     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+//示例 3:
+//输入: [7,6,4,3,1]
+//输出: 0
+//解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+//func maxProfit(_ prices: [Int]) -> Int {
+//    var max_profit = 0
+//    var left = 0
+//    var right = 1
+//    while left < right && right < prices.count {
+//        let sub = prices[right] - prices[left]
+//        if sub > 0 && ((right < prices.count - 1 && prices[right] > prices[right + 1]) || right == prices.count - 1) {
+//            max_profit += sub
+//            left = right + 1
+//            right = left + 1
+//        } else if sub <= 0 {
+//            left += 1
+//            right += 1
+//        } else {
+//            right += 1
+//        }
+//    }
+//    return max_profit
+//}
+//print(maxProfit([7,1,5,3,6,4]))
+//121. 买卖股票的最佳时机
+//给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+//你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+//返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+//示例 1：
+//输入：[7,1,5,3,6,4]
+//[2,9,3,8,1,9]
+//输出：5
+//解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+//     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+//示例 2：
+//输入：prices = [7,6,4,3,1]
+//输出：0
+//解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+//func maxProfit(_ prices: [Int]) -> Int {
+//    var left = 0
+//    var right = 1
+//    var max_profit = 0
+//    while left < right && right < prices.count {
+//        if prices[left] <= prices[right] {
+//            max_profit = max(max_profit, prices[right] - prices[left])
+//            right += 1
+//        } else {
+//            left = right
+//            right += 1
+//        }
+//    }
+//    return max_profit
+//}
+//print(maxProfit([7,6,4,3,1]))
 
 //120. 三角形最小路径和
 //给定一个三角形 triangle ，找出自顶向下的最小路径和。
@@ -155,9 +387,17 @@ let n = createTree([1,2,5,3,4,nil,6])
 //-104 <= triangle[i][j] <= 104
 //进阶：
 //你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题吗？
-func minimumTotal(_ triangle: [[Int]]) -> Int {
-    
-}
+//func minimumTotal(_ triangle: [[Int]]) -> Int {
+//    var dp = [Int](repeating: 0, count: triangle.count + 1)
+//    let n = triangle.count
+//    for i in (0...n - 1).reversed() {
+//        for j in 0...i {
+//            dp[j] = min(dp[j], dp[j + 1]) + triangle[i][j]
+//        }
+//    }
+//    return dp[0]
+//}
+//print(minimumTotal([[2],[3,4],[6,5,7],[4,1,8,3]]))
 //119. 杨辉三角 II
 //给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
 //
