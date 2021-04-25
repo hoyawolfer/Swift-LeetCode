@@ -6,7 +6,17 @@
 //
 
 import Foundation
-class ListNode {
+class ListNode: Equatable, Hashable {
+    public func hash(into hasher: inout Hasher) {
+        // 用于唯一标识
+        hasher.combine(val)
+        hasher.combine(ObjectIdentifier(self))
+    }
+
+    static func == (lhs: ListNode, rhs: ListNode) -> Bool {
+        return lhs === rhs
+    }
+    
     public var val: Int
     public var next: ListNode?
     public init() { self.val = 0; self.next = nil; }
@@ -133,6 +143,202 @@ func createTree(_ nums: [Int?]) -> TreeNode? {
 //let n = createTree([5,4,8,11,nil,13,4,7,2,nil,nil,nil,nil,5,1])
 let n = createTree([4,9,0,5,1])
 
+//148. 排序链表
+//给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+//进阶：
+//你可以在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序吗？
+//示例 1：
+//输入：head = [4,2,1,3]
+//输出：[1,2,3,4]
+//示例 2：
+//输入：head = [-1,5,3,4,0]
+//输出：[-1,0,3,4,5]
+//示例 3：
+//输入：head = []
+//输出：[]
+
+
+func sortList(_ head: ListNode?) -> ListNode? {
+    if head == nil {
+        return nil
+    }
+    let dummy = ListNode.init()
+    var h = head
+    dummy.next = h
+    var last: ListNode?
+    while h?.next != nil {
+        while last !== h {
+            let p = (h?.next)!
+            if p.val < h!.val {
+                
+            }
+        }
+    }
+    
+    
+}
+//146. LRU 缓存机制
+//运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制 。
+//实现 LRUCache 类：
+//LRUCache(int capacity) 以正整数作为容量 capacity 初始化 LRU 缓存
+//int get(int key) 如果关键字 key 存在于缓存中，则返回关键字的值，否则返回 -1 。
+//void put(int key, int value) 如果关键字已经存在，则变更其数据值；如果关键字不存在，则插入该组「关键字-值」。当缓存容量达到上限时，它应该在写入新数据之前删除最久未使用的数据值，从而为新的数据值留出空间。
+//进阶：你是否可以在 O(1) 时间复杂度内完成这两种操作？
+//示例：
+//输入
+//["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+//[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+//输出
+//[null, null, null, 1, null, -1, null, -1, 3, 4]
+//解释
+//LRUCache lRUCache = new LRUCache(2);
+//lRUCache.put(1, 1); // 缓存是 {1=1}
+//lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}
+//lRUCache.get(1);    // 返回 1
+//lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+//lRUCache.get(2);    // 返回 -1 (未找到)
+//lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
+//lRUCache.get(1);    // 返回 -1 (未找到)
+//lRUCache.get(3);    // 返回 3
+//lRUCache.get(4);    // 返回 4
+//提示：
+//1 <= capacity <= 3000
+//0 <= key <= 3000
+//0 <= value <= 104
+//最多调用 3 * 104 次 get 和 put
+
+//class LinkedNodeList {
+//    var val = 0
+//    var key = 0
+//    var pre: LinkedNodeList?
+//    var next: LinkedNodeList?
+//    init(_ key: Int, _ val: Int) {
+//        self.val = val
+//        self.key = key
+//    }
+//}
+//
+//class LRUCache {
+//    var capacity = 0
+//    var kv:[Int: LinkedNodeList] = [Int: LinkedNodeList]()
+//    var dummy_head = LinkedNodeList(0, 0)
+//    var dummy_tail = LinkedNodeList(0, 0)
+//
+//    func insertToHead(_ node: LinkedNodeList) {
+//        node.next = dummy_head.next
+//        dummy_head.next!.pre = node
+//        dummy_head.next = node
+//        node.pre = dummy_head
+//    }
+//
+//    func removeTailNode() -> LinkedNodeList {
+//        return removeNode(dummy_tail.pre!)
+//    }
+//
+//    func removeNode(_ node: LinkedNodeList) -> LinkedNodeList {
+//        node.pre?.next = node.next
+//        node.next?.pre = node.pre
+//        node.pre = nil
+//        node.next = nil
+//        return node
+//    }
+//
+//    func moveToHead(_ node: LinkedNodeList) {
+//        let _ = removeNode(node)
+//        insertToHead(node)
+//    }
+//
+//
+//    init(_ capacity: Int) {
+//        self.capacity = capacity
+//        dummy_head.next = dummy_tail
+//        dummy_tail.pre = dummy_head
+//    }
+//
+//    func get(_ key: Int) -> Int {
+//        if kv.keys.contains(key) {
+//            let node = kv[key]!
+//            moveToHead(node)
+//            return node.val
+//        } else {
+//            return -1
+//        }
+//    }
+//
+//    func put(_ key: Int, _ value: Int) {
+//        let node = LinkedNodeList.init(key, value)
+//        if kv.keys.contains(key) {
+//            let _ = removeNode(kv[key]!)
+//            insertToHead(node)
+//        } else {
+//            if kv.count < 2 {
+//                insertToHead(node)
+//            } else {
+//                let removedNode = removeTailNode()
+//                kv[removedNode.key] = nil
+//                insertToHead(node)
+//            }
+//        }
+//        kv[key] = node
+//    }
+//}
+//
+//let cache = LRUCache(1)
+//cache.put(2, 1)
+//print(cache.get(2))
+
+//let cache = LRUCache(2)
+//cache.put(1, 1)
+//cache.put(2, 2)
+//print(cache.get(1))
+//cache.put(3, 3)
+//print(cache.get(2))
+//cache.put(4, 4)
+//print(cache.get(1))
+//print(cache.get(3))
+//print(cache.get(4))
+
+
+
+//142. 环形链表 II
+//给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+//为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+//说明：不允许修改给定的链表。
+//进阶：
+//你是否可以使用 O(1) 空间解决此题？
+//示例 1：
+//输入：head = [3,2,0,-4], pos = 1
+//输出：返回索引为 1 的链表节点
+//解释：链表中有一个环，其尾部连接到第二个节点。
+//示例 2：
+//输入：head = [1,2], pos = 0
+//输出：返回索引为 0 的链表节点
+//解释：链表中有一个环，其尾部连接到第一个节点。
+//示例 3：
+//输入：head = [1], pos = -1
+//输出：返回 null
+//解释：链表中没有环。
+
+//func detectCycle(_ head: ListNode?) -> ListNode? {
+//    var slow = head
+//    var fast = head
+//    while true {
+//        if fast == nil || fast?.next == nil {
+//            return nil
+//        }
+//        slow = slow?.next
+//        fast = fast?.next?.next
+//        if slow == fast {
+//            break
+//        }
+//    }
+//    fast = head
+//    while slow == fast {
+//        slow = slow?.next
+//        fast = fast?.next
+//    }
+//    return fast
+//}
 //130. 被围绕的区域
 //给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
 //示例 1：
